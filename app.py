@@ -30,9 +30,6 @@ def index():
         "temperature": 0.4,
         "max_tokens": 1000
     }
-
-
-
         try:
             response = requests.post(api_url, headers=headers, json=data)
             response.raise_for_status()
