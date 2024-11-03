@@ -20,20 +20,21 @@ def index():
             "Content-Type": "application/json"
         }
 
-
-        data = {
-            "model": "text-davinci-003",
-            "prompt": user_input,
-            "max_tokens": 100
-        }
+    data = {
+        "model": "gpt-4o-mini",  # 模型名稱
+        "messages": [
+            {"role": "user", "content": user_input}  # 用戶的輸入
+        ],
+        "max_tokens": 100  # 控制生成的最大 token 數
+    }
 
         try:
             response = requests.post(api_url, headers=headers, json=data)
             response.raise_for_status()
             response_text = response.json()["choices"][0]["text"].strip()
         except Exception as e:
-            response_text = f"Hello world: {OPENAI_API_KEY}"
-            #response_text = f"出現錯誤：{str(e)}"
+            response_text = f"出現錯誤：{str(e)}"
+            #response_text = f"Hello world: {OPENAI_API_KEY}"
 
     return render_template("index.html", response_text=response_text)
 
