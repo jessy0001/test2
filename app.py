@@ -10,6 +10,7 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 @app.route("/", methods=["GET", "POST"])
 def index():
     response_text = ""
+    response_text = "Hello! World!!!"
     if request.method == "POST":
         user_input = request.form["user_input"]
 
