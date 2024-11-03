@@ -1,20 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OpenAI Chat</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://yourserver.com https://api.openai.com; style-src 'self' 'unsafe-inline'; script-src 'self';">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>陳琚安人生導師對話系統</title>
 </head>
 <body>
-    <h1>OpenAI Chatbot</h1>
-    <form method="POST">
-        <label for="user_input">輸入文字:</label>
-        <input type="text" id="user_input" name="user_input" required>
-        <button type="submit">提交</button>
-    </form>
-    {% if response_text %}
-        <h2>回應:</h2>
-        <p>{{ response_text }}</p>
-    {% endif %}
+    <div class="chat-container">
+        <div class="chat-header">陳琚安人生導師對話系統</div>
+        <div id="chat-messages" class="chat-messages">
+            <!-- Default display area -->
+            <div class="message"><strong>Joann:</strong> 歡迎！現在你想聊些什麼？</div>
+            {% if messages %}
+                {% for msg in messages %}
+                    <div class="message"><strong>{{ msg.role }}:</strong> {{ msg.content }}</div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <form method="get" action="/process" class="chat-input-container" onsubmit="return false;">
+            <input id="user-input" name="user-input" type="text" placeholder="輸入您的問題" autofocus>
+            <button type="button" onclick="sendMessage()">發送</button>
+        </form>
+    </div>
+    <script>
+        function sendMessage() {
+            const userInput = document.getElementById('user-input').value;
+            if (userInput.trim() === "") return; // Avoid empty submissions
+            fetch(`/process?user-input=${encodeURIComponent(userInput)}`)
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('chat-messages').innerHTML = html;
+                    document.getElementById('user-input').value = ""; // Clear input
+                    document.getElementById('chat-messages').scrollTop = document.getElementById('chat-messages').scrollHeight; // Scroll to latest message
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    </script>
 </body>
 </html>
