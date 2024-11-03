@@ -28,14 +28,8 @@
         function sendMessage() {
             const userInput = document.getElementById('user-input').value;
             if (userInput.trim() === "") return; // Avoid empty submissions
-            fetch(`/process?user-input=${encodeURIComponent(userInput)}`)
-                .then(response => response.text())
-                .then(html => {
-                    document.getElementById('chat-messages').innerHTML = html;
-                    document.getElementById('user-input').value = ""; // Clear input
-                    document.getElementById('chat-messages').scrollTop = document.getElementById('chat-messages').scrollHeight; // Scroll to latest message
-                })
-                .catch(error => console.error('Error:', error));
+			alert(/process?user-input=`+userInput);
+
         }
     </script>
 </body>
