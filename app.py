@@ -21,21 +21,18 @@ def index():
         }
 
 
-    # Prepare API request payload
-    data = {
-        "model": "gpt-4o-mini",
-        "messages": [
-            {"role": "user", "content": user_input}
-        ],
-        "temperature": 0.4,
-        "max_tokens": 1000
-    }
+        data = {
+            "model": "text-davinci-003",
+            "prompt": user_input,
+            "max_tokens": 100
+        }
+
         try:
             response = requests.post(api_url, headers=headers, json=data)
             response.raise_for_status()
             response_text = response.json()["choices"][0]["text"].strip()
         except Exception as e:
-            response_text = "Hello world"
+            response_text = f"Hello world: {OPENAI_API_KEY}"
             #response_text = f"出現錯誤：{str(e)}"
 
     return render_template("index.html", response_text=response_text)
