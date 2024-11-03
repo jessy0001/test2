@@ -19,11 +19,31 @@ def index():
             "Authorization": f"Bearer {OPENAI_API_KEY}",
             "Content-Type": "application/json"
         }
-        data = {
-            "model": "text-davinci-003",
-            "prompt": user_input,
-            "max_tokens": 100
-        }
+
+
+    # Construct the system message
+    system_message = (
+        f"你是一個問答系統，基於以下內容回答問題：\n"
+        f"{specified_file_content}\n"
+        "你是一位人生導師，請用溫暖的對話方式來回答。\n"
+        "請按照以下格式回答：\n"
+        "- 每個標題只使用一個 #，如：# 主題。\n"
+        "- 各段落之間請換行，保持清楚結構。\n"
+        "- 每個要點前請加上 1.、2. 等編號。\n"
+        "- 最後請提供簡潔的總結。"
+    )
+
+    # Prepare API request payload
+    data = {
+        "model": "gpt-4o-mini",
+        "messages": [
+            {"role": "system", "content": system_message},
+            {"role": "user", "content": user_input}
+        ],
+        "temperature": 0.4,
+        "max_tokens": 1000
+    }
+
 
         # 發送請求到 OpenAI API
         try:
