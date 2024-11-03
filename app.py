@@ -10,7 +10,6 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 @app.route("/", methods=["GET", "POST"])
 def index():
     response_text = ""
-    response_text = "Hello! World!!!"
     if request.method == "POST":
         user_input = request.form["user_input"]
 
@@ -52,7 +51,8 @@ def index():
             response.raise_for_status()
             response_text = response.json()["choices"][0]["text"].strip()
         except Exception as e:
-            response_text = f"出現錯誤：{str(e)}"
+            response_text = f"Hello world"
+            #response_text = f"出現錯誤：{str(e)}"
 
     return render_template("index.html", response_text=response_text)
 
