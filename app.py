@@ -23,20 +23,24 @@ def index():
     data = {
         "model": "gpt-4o-mini",  # 模型名稱
         "messages": [
-            {"role": "user", "content": user_input}  # 用戶的輸入
+            {"role": "user", "content": "Please tell me about open ai"}  # 用戶的輸入
         ],
         "max_tokens": 100  # 控制生成的最大 token 數
     }
 
-        try:
-            response = requests.post(api_url, headers=headers, json=data)
-            response.raise_for_status()
-            response_text = response.json()["choices"][0]["text"].strip()
-        except Exception as e:
-            response_text = f"出現錯誤：{str(e)}"
-            #response_text = f"Hello world: {OPENAI_API_KEY}"
+   # 發送 POST 請求
+    response = requests.post(api_url, headers=headers, json=data)
+    
+    if response.status_code == 200:
+        # 請求成功，返回的資料
+        response_data = response.json()
+        response_text = response_data['choices'][0]['message']['content']  # 獲取生成的內容
+    else:
+        # 請求失敗，輸出錯誤信息
+        response_text = f"Error: {response.status_code}, {response.text}"
 
     return render_template("index.html", response_text=response_text)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
+    
